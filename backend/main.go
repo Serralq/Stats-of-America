@@ -13,20 +13,16 @@ import (
 	"time"
 )
 
-func generateSeriesFromArray(records [][]string) {
-	// returns points, max_x, max_y, min_x, min_y
+func generateSeriesFromArray(records [][]string, file_title string) {
 	// Get titles
 	var x_title string = records[0][1]
 	var y_title string = records[0][2]
 	var part_title string = x_title + " vs. " + y_title
-
-	// Setup var
+	// Setup multi-dimensional array
 	perState := make(map[string][][]float64)
-	//var max_x, _ = strconv.ParseFloat(records[0][1], 64)
-	//var max_y, _ = strconv.ParseFloat(records[0][2], 64)
-	//var min_x = max_x
-	//var min_y = max_y
-	// Setup graph
+	// Create output directory
+	os.MkdirAll("Output/Csv/"+file_title, 777)
+	os.MkdirAll("Output/Img/"+file_title, 777)
 
 	// Per record
 	for _, eachrecord := range records[1:] {
@@ -43,68 +39,90 @@ func generateSeriesFromArray(records [][]string) {
 		temp = append(temp, y)
 		perState[state] = append(perState[state], temp)
 
-		// Find max
-		//if max_x < x {
-		//	max_x = x
-		//} else if min_x > x {
-		//	min_x = x
-		//}
-		// Find min
-		//if max_y < y {
-		//	max_y = y
-		//} else if min_y > y {
-		//	min_y = y
-		//}
-
-		// Logging
-		fmt.Println(eachrecord)
 	}
 
+	// Per state
 	for state, v := range perState {
-		// Setup graph
-		p := plot.New()
-		p.Title.Text = part_title + " (" + state + ")"
-		p.X.Label.Text = x_title
-		p.Y.Label.Text = y_title
-		points := make(plotter.XYs, len(v))
-
 		// Sort data
 		sort.SliceStable(perState[state], func(i, j int) bool {
 			return perState[state][i][0] < perState[state][j][0]
 		})
 
-		// Plot data
-		for i, pair := range v {
-			points[i].X = pair[0]
-			points[i].Y = pair[1]
+		// Setup graph
+		{
+			p := plot.New()
+			p.Title.Text = part_title + " (" + state + ")"
+			p.X.Label.Text = x_title
+			p.Y.Label.Text = y_title
+			points := make(plotter.XYs, len(v))
+
+			// Plot data
+			for i, pair := range v {
+				points[i].X = pair[0]
+				points[i].Y = pair[1]
+			}
+
+			// Save plot
+			_ = plotutil.AddLinePoints(p, "", points)
+			_ = p.Save(4*vg.Inch, 4*vg.Inch, "Output/Img/"+file_title+"/"+state+".png")
+			fmt.Println("Completing " + state)
 		}
 
-		// Save plot
-		_ = plotutil.AddLinePoints(p, "", points)
-		_ = p.Save(4*vg.Inch, 4*vg.Inch, "Output/"+part_title+"-"+state+".png")
-		fmt.Println("Completing " + state)
+		// Setup split csv
+		{
+			file, err := os.Create("Output/Csv/" + file_title + "/" + state + ".csv")
+			if err != nil {
+				fmt.Println(err)
+			}
+			defer file.Close()
+			writer := csv.NewWriter(file)
+			headers := []string{x_title, y_title}
+			data := v
+			// Setup max/min variables
+			var max_x = v[len(v)-1][0]
+			var max_y = v[len(v)-1][1]
+			var min_x = v[0][0]
+			var min_y = v[0][1]
+
+			// Writing csv
+			writer.Write(headers)
+			for _, row := range data {
+				// Temp value
+				temp := make([]string, 0)
+				// X value
+				temp_int := (row[0] - min_x) / (max_x - min_x)
+				temp = append(temp, strconv.FormatFloat(temp_int, 'f', -1, 64))
+				// Y value
+				temp_int = (row[1] - min_y) / (max_y - min_y)
+				temp = append(temp, strconv.FormatFloat(temp_int, 'f', -1, 64))
+				// Writer
+				writer.Write(temp)
+			}
+		}
 	}
 	// Results image
+	{
+	}
 }
 
 func main() {
 	// Performance checks
 	start := time.Now()
+
 	// Filepath
-	const filepath = "Dataset/EPA_SmartLocationDatabase_V3_Jan_2021_Final [Larger].csv"
-	// Read file
-	file, _ := os.Open(filepath)
-	defer file.Close()
-	reader := csv.NewReader(file)
-	records, _ := reader.ReadAll()
+	const dirpath = "Dataset/"
+	f, _ := os.Open(dirpath)
+	files, _ := f.Readdir(0)
 
-	// Setup line
-	generateSeriesFromArray(records)
-
-	// Results logging
-	//fmt.Println(title)
-	//fmt.Printf("Max x: %.2f, Max y: %.2f\n", max_x, max_y)
-	//fmt.Printf("Min x: %.2f, Min y: %.2f\n", min_x, min_y)
+	// Per file
+	for _, v := range files {
+		// Read file
+		file, _ := os.Open(dirpath + v.Name())
+		defer file.Close()
+		reader := csv.NewReader(file)
+		records, _ := reader.ReadAll()
+		generateSeriesFromArray(records, v.Name())
+	}
 
 	// Performance checks
 	duration := time.Since(start)

@@ -23,4 +23,5 @@ go.work
 
 # Manually added
 .idea/*
-backend/Output/*
+backend/Output/Csv/*
+backend/Output/Img/*
