@@ -81,7 +81,7 @@ func main() {
 	fmt.Printf("Max x: %.2f, Max y: %.2f\n", max_x, max_y)
 	fmt.Printf("Min x: %.2f, Min y: %.2f\n", min_x, min_y)
 	_ = plotutil.AddLinePoints(p, "", points)
-	_ = p.Save(4*vg.Inch, 4*vg.Inch, "points.png")
+	_ = p.Save(4*vg.Inch, 4*vg.Inch, "Output/points.png")
 
 	// Performance checks
 	duration := time.Since(start)
