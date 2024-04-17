@@ -16,8 +16,8 @@ func generateSeriesFromArray(records [][]string, p *plot.Plot) (plotter.XYs, flo
 	// returns points, max_x, max_y, min_x, min_y
 
 	// Setup var
-	var max_x, _ = strconv.ParseFloat(records[0][2], 64)
-	var max_y, _ = strconv.ParseFloat(records[0][3], 64)
+	var max_x, _ = strconv.ParseFloat(records[0][1], 64)
+	var max_y, _ = strconv.ParseFloat(records[0][2], 64)
 	var min_x = max_x
 	var min_y = max_y
 	points := make(plotter.XYs, len(records))
@@ -25,8 +25,8 @@ func generateSeriesFromArray(records [][]string, p *plot.Plot) (plotter.XYs, flo
 	// Per record
 	for i, eachrecord := range records {
 		// Parse variable
-		var x, _ = strconv.ParseFloat(eachrecord[2], 64)
-		var y, _ = strconv.ParseFloat(eachrecord[3], 64)
+		var x, _ = strconv.ParseFloat(eachrecord[1], 64)
+		var y, _ = strconv.ParseFloat(eachrecord[2], 64)
 
 		// Find max
 		if max_x < x {
@@ -43,7 +43,7 @@ func generateSeriesFromArray(records [][]string, p *plot.Plot) (plotter.XYs, flo
 
 		// Logging
 		fmt.Println(eachrecord)
-		fmt.Printf("%s: %.2f, %s: %.2f\n", eachrecord[2], x, eachrecord[3], y)
+		fmt.Printf("%s: %.2f, %s: %.2f\n", eachrecord[1], x, eachrecord[2], y)
 		points[i].X = x
 		points[i].Y = y
 	}
@@ -56,7 +56,7 @@ func main() {
 	// Performance checks
 	start := time.Now()
 	// Filepath
-	const filepath = "Dataset/EPA_SmartLocationDatabase_V3_Jan_2021_Final.csv"
+	const filepath = "Dataset/EPA_SmartLocationDatabase_V3_Jan_2021_Final [Larger].csv"
 	// Read file
 	file, _ := os.Open(filepath)
 	defer file.Close()
@@ -64,8 +64,8 @@ func main() {
 	records, _ := reader.ReadAll()
 
 	// Get titles
-	var x_title string = records[0][2]
-	var y_title string = records[0][3]
+	var x_title string = records[0][1]
+	var y_title string = records[0][2]
 	var title string = x_title + " vs. " + y_title
 
 	// Setup graph
