@@ -3,10 +3,6 @@ package main
 import (
 	"encoding/csv"
 	"fmt"
-	"gonum.org/v1/plot"
-	"gonum.org/v1/plot/plotter"
-	"gonum.org/v1/plot/plotutil"
-	"gonum.org/v1/plot/vg"
 	"os"
 	"sort"
 	"strconv"
@@ -17,12 +13,11 @@ func generateSplitsFromRecords(records [][]string, file_title string) {
 	// Get titles
 	var x_title string = records[0][1]
 	var y_title string = records[0][2]
-	var part_title string = x_title + " vs. " + y_title
+
 	// Setup multi-dimensional array
 	perState := make(map[string][][]float64)
 	// Create output directory
 	os.MkdirAll("Output/Csv/"+file_title, 777)
-	os.MkdirAll("Output/Img/"+file_title, 777)
 
 	// Per record
 	for _, eachrecord := range records[1:] {
@@ -47,26 +42,6 @@ func generateSplitsFromRecords(records [][]string, file_title string) {
 		sort.SliceStable(perState[state], func(i, j int) bool {
 			return perState[state][i][0] < perState[state][j][0]
 		})
-
-		// Setup graph
-		{
-			p := plot.New()
-			p.Title.Text = part_title + " (" + state + ")"
-			p.X.Label.Text = x_title
-			p.Y.Label.Text = y_title
-			points := make(plotter.XYs, len(v))
-
-			// Plot data
-			for i, pair := range v {
-				points[i].X = pair[0]
-				points[i].Y = pair[1]
-			}
-
-			// Save plot
-			_ = plotutil.AddLinePoints(p, "", points)
-			_ = p.Save(4*vg.Inch, 4*vg.Inch, "Output/Img/"+file_title+"/"+state+".png")
-			fmt.Println("Completing " + state)
-		}
 
 		// Setup split csv
 		{
@@ -99,9 +74,6 @@ func generateSplitsFromRecords(records [][]string, file_title string) {
 				writer.Write(temp)
 			}
 		}
-	}
-	// Results image
-	{
 	}
 }
 
