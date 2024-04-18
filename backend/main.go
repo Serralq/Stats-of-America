@@ -13,7 +13,7 @@ import (
 	"time"
 )
 
-func generateSeriesFromArray(records [][]string, file_title string) {
+func generateSplitsFromRecords(records [][]string, file_title string) {
 	// Get titles
 	var x_title string = records[0][1]
 	var y_title string = records[0][2]
@@ -105,10 +105,7 @@ func generateSeriesFromArray(records [][]string, file_title string) {
 	}
 }
 
-func main() {
-	// Performance checks
-	start := time.Now()
-
+func generateSplit() {
 	// Filepath
 	const dirpath = "Dataset/"
 	f, _ := os.Open(dirpath)
@@ -121,8 +118,16 @@ func main() {
 		defer file.Close()
 		reader := csv.NewReader(file)
 		records, _ := reader.ReadAll()
-		generateSeriesFromArray(records, v.Name())
+		generateSplitsFromRecords(records, v.Name())
 	}
+}
+
+func main() {
+	// Performance checks
+	start := time.Now()
+
+	// Generate Split Csv files from
+	generateSplit()
 
 	// Performance checks
 	duration := time.Since(start)
