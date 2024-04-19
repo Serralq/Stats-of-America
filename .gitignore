@@ -23,5 +23,6 @@ go.work
 
 # Manually added
 .idea/*
-backend/Output/Csv/*
-backend/Output/Img/*
+backend/Output/Csv*
+backend/Output/Split*
+backend/Output/comparisons.json
