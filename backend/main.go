@@ -91,7 +91,7 @@ func generateSplitsFromRecords(records [][]string) {
 			// Create split file
 			file, _ := os.Create("Output/Split/" + title + "/" + state + ".csv")
 			defer file.Close()
-			fmt.Println("Writing " + state)
+			fmt.Println("Writing " + title + "/" + state)
 			// Write split headers
 			writer := csv.NewWriter(file)
 			defer writer.Flush()
@@ -225,7 +225,7 @@ func generateJSON() {
 
 	// Create json file
 	bytes, _ := json.Marshal(result)
-	ioutil.WriteFile("Output\\comparisons.json", bytes, 0777)
+	ioutil.WriteFile("Output/comparisons.json", bytes, 0777)
 }
 
 func main() {
