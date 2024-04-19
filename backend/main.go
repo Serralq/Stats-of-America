@@ -235,12 +235,12 @@ func main() {
 	// Generate Split Csv files from Dataset
 	generateSplit()
 	duration := time.Since(start)
-	fmt.Println("Generate Split: " + strconv.FormatInt(int64(duration), 10))
+	fmt.Println("Generate Split: " + duration.String())
 
 	// Generate JSON file
 	generateJSON()
 
 	// Performance checks
 	duration = time.Since(start)
-	fmt.Println("Generate JSON: " + strconv.FormatInt(int64(duration), 10))
+	fmt.Println("Generate JSON: " + duration.String())
 }
