@@ -48,7 +48,7 @@ func generateSplitsFromRecords(records [][]string) {
 
 		var state string = eachrecord[0][len(eachrecord[0])-2:]
 		// TODO testing
-		if state != "WY" && state != "ND" && state != "NY" {
+		if state != "WY" && state != "ND" && state != "NY" && state != "MD" && state != "MO" {
 			continue
 		}
 		// Parse variable
@@ -219,13 +219,17 @@ func generateJSON() {
 			if f != f2 {
 				score := compareCSV(f, f2)
 				temp.Data = append(temp.Data, Comparison{Title: paths[j], Score: score})
-				temp.Top = append(temp.Top, Comparison{Title: paths[j], Score: score})
 			}
 		}
-		// Sort the array, larger -> smaller
+		// Sort the array, smaller -> larger
 		sort.SliceStable(temp.Data, func(i, j int) bool {
-			return temp.Data[i].Score > temp.Data[j].Score
+			return temp.Data[i].Score < temp.Data[j].Score
 		})
+		// Top three results
+		temp.Top = append(temp.Top, temp.Data[0])
+		temp.Top = append(temp.Top, temp.Data[1])
+		temp.Top = append(temp.Top, temp.Data[2])
+
 		// Append results
 		result.Set_data = append(result.Set_data, temp)
 	}
