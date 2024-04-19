@@ -23,5 +23,3 @@ go.work
 
 # Manually added
 .idea/*
-backend/Output/Csv*
-backend/Output/Split*
