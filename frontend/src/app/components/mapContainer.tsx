@@ -3,7 +3,6 @@
 import { ComposableMap, Geographies, Geography } from 'react-simple-maps';
 import { GEO_URL } from '../util/constants';
 import { RenderableGeography } from '../types/map';
-import { geoAlbersUsa } from 'd3-geo';
 
 export default function MapContainer() {
 	return (
