@@ -47,10 +47,6 @@ func generateSplitsFromRecords(records [][]string) {
 		}
 
 		var state string = eachrecord[0][len(eachrecord[0])-2:]
-		// TODO testing
-		if state != "WY" && state != "ND" && state != "NY" && state != "MD" && state != "MO" {
-			continue
-		}
 		// Parse variable
 		var x, _ = strconv.ParseFloat(eachrecord[1], 64)
 		var y, _ = strconv.ParseFloat(eachrecord[2], 64)
@@ -85,10 +81,7 @@ func generateSplitsFromRecords(records [][]string) {
 		// Setup output file
 		{
 			// Create csv file
-			file_csv, err := os.Create("Output/Csv/" + title + "/" + state + ".csv")
-			if err != nil {
-				fmt.Println(err)
-			}
+			file_csv, _ := os.Create("Output/Csv/" + title + "/" + state + ".csv")
 			defer file_csv.Close()
 			// Write split headers
 			writer_csv := csv.NewWriter(file_csv)
@@ -96,10 +89,7 @@ func generateSplitsFromRecords(records [][]string) {
 			headers := []string{x_title, y_title}
 			writer_csv.Write(headers)
 			// Create split file
-			file, err := os.Create("Output/Split/" + title + "/" + state + ".csv")
-			if err != nil {
-				fmt.Println(err)
-			}
+			file, _ := os.Create("Output/Split/" + title + "/" + state + ".csv")
 			defer file.Close()
 			fmt.Println("Writing " + state)
 			// Write split headers
@@ -188,7 +178,6 @@ func compareCSV(src, antag string) float64 {
 		v_antag, _ := strconv.ParseFloat(d_antag[i][1], 64)
 		score += math.Abs(v_src - v_antag)
 	}
-	fmt.Println(score)
 	return score
 }
 
@@ -233,7 +222,6 @@ func generateJSON() {
 		// Append results
 		result.Set_data = append(result.Set_data, temp)
 	}
-	fmt.Println(result)
 
 	// Create json file
 	bytes, _ := json.Marshal(result)
@@ -246,11 +234,13 @@ func main() {
 
 	// Generate Split Csv files from Dataset
 	generateSplit()
+	duration := time.Since(start)
+	fmt.Println("Generate Split: " + strconv.FormatInt(int64(duration), 10))
 
 	// Generate JSON file
 	generateJSON()
 
 	// Performance checks
-	duration := time.Since(start)
-	fmt.Println(duration)
+	duration = time.Since(start)
+	fmt.Println("Generate JSON: " + strconv.FormatInt(int64(duration), 10))
 }
