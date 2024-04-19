@@ -25,4 +25,3 @@ go.work
 .idea/*
 backend/Output/Csv*
 backend/Output/Split*
-backend/Output/comparisons.json
