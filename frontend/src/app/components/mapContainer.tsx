@@ -10,7 +10,7 @@ export default function MapContainer() {
 
 	return (
 		<div className="bg-gray-700 mt-24 p-8 drop-shadow-sm rounded-md border-solid border-gray-600 border flex flex-col items-center">
-			{selectedState == null ? (
+			{!selectedState ? (
 				<h3 className="text-gray-300 font-semibold">
 					Select a state to get started!
 				</h3>
