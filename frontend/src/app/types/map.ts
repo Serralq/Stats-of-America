@@ -4,10 +4,10 @@ export interface StateMap {
 	transform: {
 		scale: number[];
 		translate: number[];
-	}
+	};
 	objects: {
 		states: MapObject;
-	}
+	};
 	arcs: number[][];
 }
 
@@ -29,5 +29,5 @@ interface Geometry {
 	id: string;
 	properties: {
 		name: string;
-	}
+	};
 }
