@@ -147,9 +147,6 @@ func generateSplitsFromRecords(records [][]string, algo string) {
 			v = merge_sort(v)
 		} else if algo == "bubble" {
 			v = bubble_sort(v)
-			//sort.SliceStable(v, func(i, j int) bool {
-			//	return v[i][0] < v[j][0]
-			//})
 		}
 
 		// Find max/min values
@@ -339,15 +336,15 @@ func main() {
 	duration = time.Since(start)
 	fmt.Println("Generate Split with Bubble Sort: " + duration.String())
 	// Quick Sort
-	//start = time.Now()
-	//generateSplit("quick")
-	//duration = time.Since(start)
-	//fmt.Println("Generate Split with Quick Sort: " + duration.String())
+	start = time.Now()
+	generateSplit("quick")
+	duration = time.Since(start)
+	fmt.Println("Generate Split with Quick Sort: " + duration.String())
 	// Merge Sort
-	//start = time.Now()
-	//generateSplit("merge")
-	//duration = time.Since(start)
-	//fmt.Println("Generate Split with Merge Sort: " + duration.String())
+	start = time.Now()
+	generateSplit("merge")
+	duration = time.Since(start)
+	fmt.Println("Generate Split with Merge Sort: " + duration.String())
 
 	// Generate JSON file
 	start = time.Now()
