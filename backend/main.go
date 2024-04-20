@@ -59,6 +59,35 @@ func quick_recur(arr [][]float64, low int, high int) [][]float64 {
 	return arr
 }
 
+func merge(arr1 [][]float64, arr2 [][]float64) [][]float64 {
+	result := [][]float64{}
+	i := 0
+	j := 0
+
+	for i < len(arr1) && j < len(arr2) {
+		if arr1[i][0] < arr2[j][0] {
+			result = append(result, arr1[i])
+			i++
+		} else {
+			result = append(result, arr2[j])
+			j++
+		}
+	}
+	return result
+}
+
+func merge_sort(arr [][]float64) [][]float64 {
+	// Base case
+	if len(arr) < 2 {
+		return arr
+	}
+	// Splitting up
+	top := merge_sort(arr[len(arr)/2:])
+	bot := merge_sort(arr[:len(arr)/2])
+	// Combining together
+	return merge(top, bot)
+}
+
 func generateSplitsFromRecords(records [][]string, algo string) {
 	// Get titles
 	var x_title string = records[0][1]
@@ -78,6 +107,7 @@ func generateSplitsFromRecords(records [][]string, algo string) {
 		}
 
 		var state string = eachrecord[0][len(eachrecord[0])-2:]
+
 		// Parse variable
 		var x, _ = strconv.ParseFloat(eachrecord[1], 64)
 		var y, _ = strconv.ParseFloat(eachrecord[2], 64)
@@ -94,15 +124,8 @@ func generateSplitsFromRecords(records [][]string, algo string) {
 		if algo == "quick" {
 			v = quick_recur(v, 0, len(v)-1)
 		} else if algo == "merge" {
-			// Placeholder
-			sort.SliceStable(v, func(i, j int) bool {
-				return v[i][0] < v[j][0]
-			})
+			v = merge_sort(v)
 		} else if algo == "bubble" {
-			// Placeholder
-			sort.SliceStable(v, func(i, j int) bool {
-				return v[i][0] < v[j][0]
-			})
 			for i := 0; i < len(v)-1; i++ {
 				for j := i; j < len(v)-1; j++ {
 					if v[j][0] > v[j+1][0] {
