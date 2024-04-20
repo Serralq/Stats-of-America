@@ -25,8 +25,8 @@ export default function MapContainer() {
 								fill="rgb(31 41 55)"
 								style={{
 									default: { outline: 'none' },
-									hover: { outline: 'none' },
-									pressed: { outline: 'none' },
+									hover: { outline: 'none', fill: 'rgb(107 114 128)' },
+									pressed: { outline: 'none', fill: 'rgb(75 85 99)' },
 								}}
 								stroke="rgb(156 163 175)"
 							/>
