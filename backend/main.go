@@ -112,7 +112,7 @@ func generateSplitsFromRecords(records [][]string, algo string) {
 	// Get titles
 	var x_title string = records[0][1]
 	var y_title string = records[0][2]
-	var title string = x_title + " " + y_title
+	var title string = x_title + " vs " + y_title
 
 	// Setup multi-dimensional array
 	perState := make(map[string][][]float64)
@@ -280,7 +280,7 @@ func generateJSON() {
 			}
 			if !info.IsDir() {
 				title, _ := filepath.Rel("Output/Split", filepath.Dir(path))
-				axis := strings.Fields(title)
+				axis := strings.Split(title, " vs ")
 				temp := Path{
 					Path:   path,
 					State:  strings.TrimSuffix(filepath.Base(path), filepath.Ext(path)),
