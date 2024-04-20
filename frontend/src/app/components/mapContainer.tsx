@@ -28,7 +28,7 @@ export default function MapContainer() {
 									hover: { outline: 'none', fill: 'rgb(107 114 128)' }, // bg-gray-500
 									pressed: { outline: 'none', fill: 'rgb(75 85 99)' }, // bg-gray-600
 								}}
-								stroke="rgb(156 163 175)"
+								stroke="rgb(156 163 175)" // bg-gray-400
 							/>
 						))
 					}
