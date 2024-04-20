@@ -73,6 +73,15 @@ func merge(arr1 [][]float64, arr2 [][]float64) [][]float64 {
 			j++
 		}
 	}
+
+	// Leftovers
+	for ; i < len(arr1); i++ {
+		result = append(result, arr1[i])
+	}
+	for ; j < len(arr2); j++ {
+		result = append(result, arr2[j])
+	}
+
 	return result
 }
 
@@ -93,9 +102,7 @@ func bubble_sort(arr [][]float64) [][]float64 {
 	for i := 0; i < len(arr)-1; i++ {
 		for j := i; j < len(arr)-1; j++ {
 			if arr[j][0] > arr[j+1][0] {
-				temp := arr[j]
-				arr[j] = arr[j+1]
-				arr[j+1] = temp
+				arr[j], arr[j+1] = arr[j+1], arr[j]
 			}
 		}
 	}
@@ -141,6 +148,9 @@ func generateSplitsFromRecords(records [][]string, algo string) {
 			v = merge_sort(v)
 		} else if algo == "bubble" {
 			v = bubble_sort(v)
+			sort.SliceStable(v, func(i, j int) bool {
+				return v[i][0] < v[j][0]
+			})
 		}
 
 		// Find max/min values
@@ -325,15 +335,15 @@ func main() {
 	var duration time.Duration
 	// Generate Split Csv files from Dataset
 	// Bubble Sort
-	start = time.Now()
-	generateSplit("bubble")
-	duration = time.Since(start)
-	fmt.Println("Generate Split with Bubble Sort: " + duration.String())
+	//start = time.Now()
+	//generateSplit("bubble")
+	//duration = time.Since(start)
+	//fmt.Println("Generate Split with Bubble Sort: " + duration.String())
 	// Quick Sort
-	start = time.Now()
-	generateSplit("quick")
-	duration = time.Since(start)
-	fmt.Println("Generate Split with Quick Sort: " + duration.String())
+	//start = time.Now()
+	//generateSplit("quick")
+	//duration = time.Since(start)
+	//fmt.Println("Generate Split with Quick Sort: " + duration.String())
 	// Merge Sort
 	start = time.Now()
 	generateSplit("merge")
