@@ -10,29 +10,36 @@ import (
 	"path/filepath"
 	"sort"
 	"strconv"
+	"strings"
 	"time"
 )
 
-type Comparison struct {
-	Title string
-	Score float64
+type State struct {
+	State         string     `json:"state"`
+	Compared_Data [][]string `json:"comparedData"`
+	Path          []string   `json:"path"`
+	Similarity    float64    `json:"similarity"`
 }
 
-type Set_data struct {
-	Title string
-	Data  []Comparison
-	Top   []Comparison
-}
+//temp := map[string]string{
+//"path": path,
+//"state": filepath.Base(path), // State name
+//"x_axis": axis[0],             // X axis
+//"y_axis": axis[1],             // Y axis
+//}
 
-type Result struct {
-	Set_data []Set_data
+type Path struct {
+	Path   string
+	State  string
+	X_axis string
+	Y_axis string
 }
 
 func generateSplitsFromRecords(records [][]string) {
 	// Get titles
 	var x_title string = records[0][1]
 	var y_title string = records[0][2]
-	var title string = x_title + " vs " + y_title
+	var title string = x_title + " " + y_title
 
 	// Setup multi-dimensional array
 	perState := make(map[string][][]float64)
@@ -185,42 +192,53 @@ func generateJSON() {
 	// Filepath
 	const dirpath = "Output/Split/"
 	// All files
-	var paths = make([]string, 0)
+	var paths = make([]Path, 0)
 	filepath.Walk(dirpath,
 		func(path string, info os.FileInfo, err error) error {
 			if err != nil {
 				return err
 			}
 			if !info.IsDir() {
-				paths = append(paths, path)
+				title, _ := filepath.Rel("Output/Split", filepath.Dir(path))
+				axis := strings.Fields(title)
+				temp := Path{
+					Path:   path,
+					State:  strings.TrimSuffix(filepath.Base(path), filepath.Ext(path)),
+					X_axis: axis[0],
+					Y_axis: axis[1],
+				}
+				paths = append(paths, temp)
 			}
 			return nil
 		})
 
 	// Setup json results
-	result := Result{}
+	result := make(map[string][]State)
 
 	// Each csv file against every other csv file
-	for i, f := range paths {
-		temp := Set_data{}
-		temp.Title = paths[i]
-		for j, f2 := range paths {
-			if f != f2 {
-				score := compareCSV(f, f2)
-				temp.Data = append(temp.Data, Comparison{Title: paths[j], Score: score})
+	for _, f := range paths {
+		for _, f2 := range paths {
+			// Create entry
+			temp := State{}
+			temp.State = f2.State
+			temp.Compared_Data = [][]string{
+				{f.X_axis, f.Y_axis},
+				{f2.X_axis, f2.Y_axis},
+			}
+			temp.Path = []string{
+				f.Path, f2.Path,
+			}
+			if f.State != f2.State {
+				temp.Similarity = compareCSV(f.Path, f2.Path)
+				result[f.State] = append(result[f.State], temp)
 			}
 		}
-		// Sort the array, smaller -> larger
-		sort.SliceStable(temp.Data, func(i, j int) bool {
-			return temp.Data[i].Score < temp.Data[j].Score
-		})
-		// Top three results
-		temp.Top = append(temp.Top, temp.Data[0])
-		temp.Top = append(temp.Top, temp.Data[1])
-		temp.Top = append(temp.Top, temp.Data[2])
 
-		// Append results
-		result.Set_data = append(result.Set_data, temp)
+		// Sort the array, smaller -> larger
+		sort.SliceStable(result[f.State], func(i, j int) bool {
+			return result[f.State][i].Similarity < result[f.State][j].Similarity
+		})
+
 	}
 
 	// Create json file
