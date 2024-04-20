@@ -1,4 +1,5 @@
 export interface StateMap {
+	id: string;
 	type: MapType;
 	bbox: number[];
 	transform: {
