@@ -23,3 +23,5 @@ go.work
 
 # Manually added
 .idea/*
+
+backend/Output/*

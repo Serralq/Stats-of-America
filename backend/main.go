@@ -348,12 +348,8 @@ func state_response(w http.ResponseWriter, req *http.Request) {
 	fmt.Println(body.Comparison[1])
 
 	http.ServeFile(w, req, "Output/JSON/"+body.Comparison[0]+" vs "+body.Comparison[1]+"/"+state+".json")
-	//for name, headers := range req.Header {
-	//	for _, h := range headers {
-	//		fmt.Fprintf(w, "%v: %v\n", name, h)
-	//	}
-	//}
 }
+
 func http_server() {
 	http.HandleFunc("/comparison", comparison_repsonse)
 	http.HandleFunc("/data/", state_response)
