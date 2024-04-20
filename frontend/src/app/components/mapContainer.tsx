@@ -22,11 +22,11 @@ export default function MapContainer() {
 								id={i.toString()}
 								key={geo.rsmKey}
 								geography={geo}
-								fill="rgb(31 41 55)"
+								fill="rgb(31 41 55)" // bg-gray-800
 								style={{
 									default: { outline: 'none' },
-									hover: { outline: 'none', fill: 'rgb(107 114 128)' },
-									pressed: { outline: 'none', fill: 'rgb(75 85 99)' },
+									hover: { outline: 'none', fill: 'rgb(107 114 128)' }, // bg-gray-500
+									pressed: { outline: 'none', fill: 'rgb(75 85 99)' }, // bg-gray-600
 								}}
 								stroke="rgb(156 163 175)"
 							/>
