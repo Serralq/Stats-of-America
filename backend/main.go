@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"math"
+	"net/http"
 	"os"
 	"path/filepath"
 	"sort"
@@ -32,6 +33,10 @@ type Single struct {
 	X    string      `json:"x"`
 	Y    string      `json:"y"`
 	Data [][]float64 `json:"data"`
+}
+
+type Request struct {
+	Comparison []string `json:"comparison"`
 }
 
 func quick_sort(arr [][]float64, low int, high int) ([][]float64, int) {
@@ -331,6 +336,27 @@ func generateJSON() {
 	ioutil.WriteFile("Output/comparisons.json", bytes, 0777)
 }
 
+func comparison_repsonse(w http.ResponseWriter, req *http.Request) {
+	http.ServeFile(w, req, "Output/comparisons.json")
+}
+func state_response(w http.ResponseWriter, req *http.Request) {
+	state := strings.TrimPrefix(req.URL.Path, "/data/")
+	body := Request{}
+	json.NewDecoder(req.Body).Decode(&body)
+
+	http.ServeFile(w, req, "Output/JSON/"+body.Comparison[0]+" vs "+body.Comparison[1]+state+".json")
+	//for name, headers := range req.Header {
+	//	for _, h := range headers {
+	//		fmt.Fprintf(w, "%v: %v\n", name, h)
+	//	}
+	//}
+}
+func http_server() {
+	http.HandleFunc("/comparison", comparison_repsonse)
+	http.HandleFunc("/data/", state_response)
+	http.ListenAndServe(":3000", nil)
+}
+
 func main() {
 	var start time.Time
 	var duration time.Duration
@@ -356,4 +382,8 @@ func main() {
 	generateJSON()
 	duration = time.Since(start)
 	fmt.Println("Generate JSON: " + duration.String())
+
+	// Create http server
+	fmt.Println("Running server on localhost:3000")
+	http_server()
 }
