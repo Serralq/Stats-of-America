@@ -1,6 +1,6 @@
 export default function HeroContainer() {
 	return (
-		<div className='bg-gray-700 mt-24 p-8 w-3/6 justify-center h-1/6 drop-shadow-sm rounded-md border-solid border-gray-600 border flex'>
+		<div className='bg-gray-700 mt-24 p-8 w-4/6 justify-center h-1/6 drop-shadow-sm rounded-md border-solid border-gray-600 border flex'>
 			<div className='flex flex-col'>
 				<h1 className='font-semibold text-6xl text-center text-gray-200'>
 					Stats of America
