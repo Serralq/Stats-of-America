@@ -99,7 +99,7 @@ func merge_sort(arr [][]float64) [][]float64 {
 
 func bubble_sort(arr [][]float64) [][]float64 {
 	for i := 0; i < len(arr)-1; i++ {
-		for j := 0; j < len(arr)-1; j++ {
+		for j := 0; j < len(arr)-1-i; j++ {
 			if arr[j][0] > arr[j+1][0] {
 				arr[j], arr[j+1] = arr[j+1], arr[j]
 			}
