@@ -341,10 +341,13 @@ func comparison_repsonse(w http.ResponseWriter, req *http.Request) {
 }
 func state_response(w http.ResponseWriter, req *http.Request) {
 	state := strings.ToUpper(strings.TrimPrefix(req.URL.Path, "/data/"))
+	fmt.Println(state)
 	body := Request{}
 	json.NewDecoder(req.Body).Decode(&body)
+	fmt.Println(body.Comparison[0])
+	fmt.Println(body.Comparison[1])
 
-	http.ServeFile(w, req, "Output/JSON/"+body.Comparison[0]+" vs "+body.Comparison[1]+state+".json")
+	http.ServeFile(w, req, "Output/JSON/"+body.Comparison[0]+" vs "+body.Comparison[1]+"/"+state+".json")
 	//for name, headers := range req.Header {
 	//	for _, h := range headers {
 	//		fmt.Fprintf(w, "%v: %v\n", name, h)
