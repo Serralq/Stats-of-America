@@ -3,11 +3,15 @@
 import { ComposableMap, Geographies, Geography } from 'react-simple-maps';
 import { GEO_URL } from '../util/constants';
 import { RenderableGeography } from '../types/map';
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 
-export default function MapContainer() {
-	const [selectedState, setSelectedState] = useState<string | null>(null);
-
+export default function MapContainer({
+	selectedState,
+	setSelectedState,
+}: {
+	selectedState: string | null;
+	setSelectedState: Dispatch<SetStateAction<string | null>>;
+}) {
 	return (
 		<div className="bg-gray-700 mt-24 p-8 drop-shadow-sm rounded-md border-solid border-gray-600 border flex flex-col items-center">
 			{!selectedState ? (
