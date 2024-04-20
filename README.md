@@ -18,7 +18,7 @@ Returns a JSON object with the following structure.
 	"data": [
 		[1, 2],
 		[3, 4],
-		//... the rest of the data
+		// ...the rest of the data
 	]
 }
 ```  
