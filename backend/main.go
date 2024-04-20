@@ -88,6 +88,20 @@ func merge_sort(arr [][]float64) [][]float64 {
 	return merge(top, bot)
 }
 
+func bubble_sort(arr [][]float64) [][]float64 {
+	// It's f---ng bubble sort, what comments do you need
+	for i := 0; i < len(arr)-1; i++ {
+		for j := i; j < len(arr)-1; j++ {
+			if arr[j][0] > arr[j+1][0] {
+				temp := arr[j]
+				arr[j] = arr[j+1]
+				arr[j+1] = temp
+			}
+		}
+	}
+	return arr
+}
+
 func generateSplitsFromRecords(records [][]string, algo string) {
 	// Get titles
 	var x_title string = records[0][1]
@@ -126,15 +140,7 @@ func generateSplitsFromRecords(records [][]string, algo string) {
 		} else if algo == "merge" {
 			v = merge_sort(v)
 		} else if algo == "bubble" {
-			for i := 0; i < len(v)-1; i++ {
-				for j := i; j < len(v)-1; j++ {
-					if v[j][0] > v[j+1][0] {
-						temp := v[j]
-						v[j] = v[j+1]
-						v[j+1] = temp
-					}
-				}
-			}
+			v = bubble_sort(v)
 		}
 
 		// Find max/min values
