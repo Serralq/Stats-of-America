@@ -3,13 +3,22 @@
 import { ComposableMap, Geographies, Geography } from 'react-simple-maps';
 import { GEO_URL } from '../util/constants';
 import { RenderableGeography } from '../types/map';
+import { useState } from 'react';
 
 export default function MapContainer() {
+	const [selectedState, setSelectedState] = useState<string | null>(null);
+
 	return (
 		<div className="bg-gray-700 mt-24 p-8 drop-shadow-sm rounded-md border-solid border-gray-600 border flex flex-col items-center">
-			<h3 className="text-gray-300 font-semibold">
-				Select a state to get started!
-			</h3>
+			{selectedState == null ? (
+				<h3 className="text-gray-300 font-semibold">
+					Select a state to get started!
+				</h3>
+			) : (
+				<h3 className="text-gray-300 font-semibold">
+					Selected State: {selectedState}
+				</h3>
+			)}
 			<ComposableMap
 				projection="geoAlbersUsa"
 				projectionConfig={{ scale: 1100 }}
@@ -22,7 +31,16 @@ export default function MapContainer() {
 								id={i.toString()}
 								key={geo.rsmKey}
 								geography={geo}
-								fill="rgb(31 41 55)" // bg-gray-800
+								onMouseDown={_ => {
+									if (selectedState == geo.properties.name)
+										return setSelectedState(null);
+									else setSelectedState(geo.properties.name);
+								}}
+								fill={
+									geo.properties.name != selectedState
+										? 'rgb(31 41 55)'
+										: 'rgb(75 85 99)'
+								} // unselected: bg-gray-800; selected: bg-gray-600
 								style={{
 									default: { outline: 'none' },
 									hover: { outline: 'none', fill: 'rgb(107 114 128)' }, // bg-gray-500
