@@ -21,13 +21,6 @@ type State struct {
 	Similarity    float64    `json:"similarity"`
 }
 
-//temp := map[string]string{
-//"path": path,
-//"state": filepath.Base(path), // State name
-//"x_axis": axis[0],             // X axis
-//"y_axis": axis[1],             // Y axis
-//}
-
 type Path struct {
 	Path   string
 	State  string
@@ -35,7 +28,38 @@ type Path struct {
 	Y_axis string
 }
 
-func generateSplitsFromRecords(records [][]string) {
+func quick_sort(arr [][]float64, low int, high int) ([][]float64, int) {
+	// Sorting
+	i := low
+	for j := low; j < high; j++ {
+		if arr[j][0] < arr[high][0] {
+			temp := arr[i]
+			arr[i] = arr[j]
+			arr[j] = temp
+			i++
+		}
+	}
+
+	// Moving pivot to correct position
+	temp := arr[i]
+	arr[i] = arr[high]
+	arr[high] = temp
+
+	return arr, i
+}
+
+func quick_recur(arr [][]float64, low int, high int) [][]float64 {
+	if low < high {
+		// Sort -> Sort the halves
+		var i int
+		arr, i = quick_sort(arr, low, high)
+		arr = quick_recur(arr, low, i-1)
+		arr = quick_recur(arr, i+1, high)
+	}
+	return arr
+}
+
+func generateSplitsFromRecords(records [][]string, algo string) {
 	// Get titles
 	var x_title string = records[0][1]
 	var y_title string = records[0][2]
@@ -65,10 +89,21 @@ func generateSplitsFromRecords(records [][]string) {
 
 	// Per state
 	for state, v := range perState {
+
 		// Sort data, smaller -> larger
-		sort.SliceStable(v, func(i, j int) bool {
-			return v[i][0] < v[j][0]
-		})
+		if algo == "quick" {
+			v = quick_recur(v, 0, len(v)-1)
+		} else if algo == "merge" {
+			// Placeholder
+			sort.SliceStable(v, func(i, j int) bool {
+				return v[i][0] < v[j][0]
+			})
+		} else if algo == "bubble" {
+			// Placeholder
+			sort.SliceStable(v, func(i, j int) bool {
+				return v[i][0] < v[j][0]
+			})
+		}
 
 		// Find max/min values
 		var max_x = v[len(v)-1][0]
@@ -98,7 +133,8 @@ func generateSplitsFromRecords(records [][]string) {
 			// Create split file
 			file, _ := os.Create("Output/Split/" + title + "/" + state + ".csv")
 			defer file.Close()
-			fmt.Println("Writing " + title + "/" + state)
+			// TODO if need to check if running
+			//fmt.Println("Writing " + title + "/" + state)
 			// Write split headers
 			writer := csv.NewWriter(file)
 			defer writer.Flush()
@@ -150,7 +186,7 @@ func generateSplitsFromRecords(records [][]string) {
 	}
 }
 
-func generateSplit() {
+func generateSplit(algo string) {
 	// Filepath
 	const dirpath = "Dataset/"
 	f, _ := os.Open(dirpath)
@@ -164,7 +200,7 @@ func generateSplit() {
 		defer file.Close()
 		reader := csv.NewReader(file)
 		records, _ := reader.ReadAll()
-		generateSplitsFromRecords(records)
+		generateSplitsFromRecords(records, algo)
 	}
 }
 
@@ -247,18 +283,26 @@ func generateJSON() {
 }
 
 func main() {
-	// Performance checks
-	start := time.Now()
-
 	// Generate Split Csv files from Dataset
-	generateSplit()
+	// Bubble Sort
+	start := time.Now()
+	generateSplit("bubble")
 	duration := time.Since(start)
-	fmt.Println("Generate Split: " + duration.String())
+	fmt.Println("Generate Split with Bubble Sort: " + duration.String())
+	// Quick Sort
+	//start := time.Now()
+	//generateSplit("quick")
+	//duration := time.Since(start)
+	//fmt.Println("Generate Split with Quick Sort: " + duration.String())
+	// Merge Sort
+	start = time.Now()
+	generateSplit("merge")
+	duration = time.Since(start)
+	fmt.Println("Generate Split with Merge Sort: " + duration.String())
 
 	// Generate JSON file
+	start = time.Now()
 	generateJSON()
-
-	// Performance checks
 	duration = time.Since(start)
 	fmt.Println("Generate JSON: " + duration.String())
 }
