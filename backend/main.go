@@ -28,6 +28,12 @@ type Path struct {
 	Y_axis string
 }
 
+type Single struct {
+	X    string      `json:"x"`
+	Y    string      `json:"y"`
+	Data [][]float64 `json:"data"`
+}
+
 func quick_sort(arr [][]float64, low int, high int) ([][]float64, int) {
 	// Sorting
 	i := low
@@ -117,7 +123,7 @@ func generateSplitsFromRecords(records [][]string, algo string) {
 	// Setup multi-dimensional array
 	perState := make(map[string][][]float64)
 	// Create output directory
-	os.MkdirAll("Output/Csv/"+title, 777)
+	os.MkdirAll("Output/JSON/"+title, 777)
 	os.MkdirAll("Output/Split/"+title, 777)
 
 	// Per record
@@ -166,19 +172,15 @@ func generateSplitsFromRecords(records [][]string, algo string) {
 
 		// Setup output file
 		{
-			// Create csv file
-			file_csv, _ := os.Create("Output/Csv/" + title + "/" + state + ".csv")
-			defer file_csv.Close()
-			// Write split headers
-			writer_csv := csv.NewWriter(file_csv)
-			defer writer_csv.Flush()
+			// Create json entry container
+			single := Single{}
+			// Setting headers
+			single.X = x_title
+			single.Y = y_title
 			headers := []string{x_title, y_title}
-			writer_csv.Write(headers)
 			// Create split file
 			file, _ := os.Create("Output/Split/" + title + "/" + state + ".csv")
 			defer file.Close()
-			// TODO if need to check if running
-			//fmt.Println("Writing " + title + "/" + state)
 			// Write split headers
 			writer := csv.NewWriter(file)
 			defer writer.Flush()
@@ -224,8 +226,11 @@ func generateSplitsFromRecords(records [][]string, algo string) {
 				temp := make([]string, 0)
 				temp = append(temp, strconv.FormatFloat(v[i][0], 'f', -1, 64))
 				temp = append(temp, strconv.FormatFloat(v[i][1], 'f', -1, 64))
-				writer_csv.Write(temp)
+				single.Data = append(single.Data, []float64{v[i][0], v[i][1]})
 			}
+			// Write JSON split file
+			bytes, _ := json.Marshal(single)
+			ioutil.WriteFile("Output/JSON/"+title+"/"+state+".json", bytes, 0777)
 		}
 	}
 }
@@ -329,7 +334,7 @@ func generateJSON() {
 func main() {
 	var start time.Time
 	var duration time.Duration
-	// Generate Split Csv files from Dataset
+	// Generate Split JSON files from Dataset
 	// Bubble Sort
 	start = time.Now()
 	generateSplit("bubble")
