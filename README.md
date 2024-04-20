@@ -44,6 +44,6 @@ Returns a JSON object with the following structure.
 		}
 		// ...rest of the comparisons for each state
 	]
-	/// ...rest of the states
+	// ...rest of the states
 }
 ```
