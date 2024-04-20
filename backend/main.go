@@ -340,7 +340,7 @@ func comparison_repsonse(w http.ResponseWriter, req *http.Request) {
 	http.ServeFile(w, req, "Output/comparisons.json")
 }
 func state_response(w http.ResponseWriter, req *http.Request) {
-	state := strings.TrimPrefix(req.URL.Path, "/data/")
+	state := strings.ToUpper(strings.TrimPrefix(req.URL.Path, "/data/"))
 	body := Request{}
 	json.NewDecoder(req.Body).Decode(&body)
 
