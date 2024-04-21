@@ -338,10 +338,23 @@ func generateJSON() {
 	// Create json file
 	bytes, _ := json.Marshal(result)
 	ioutil.WriteFile("Output/comparisons.json", bytes, 0777)
+	os.RemoveAll("Output/JSON/")
+	os.MkdirAll("Output/Compare/", 777)
+	// Create split json files
+	for k, v := range result {
+		bytes, _ = json.Marshal(v)
+		ioutil.WriteFile("Output/Compare/"+k+".json", bytes, 0777)
+	}
 }
 
 func comparison_repsonse(w http.ResponseWriter, req *http.Request) {
 	http.ServeFile(w, req, "Output/comparisons.json")
+}
+
+func part_comparison_repsonse(w http.ResponseWriter, req *http.Request) {
+	state := strings.ToUpper(strings.TrimPrefix(req.URL.Path, "/comparison/"))
+
+	http.ServeFile(w, req, "Output/Compare/"+state+".json")
 }
 func state_response(w http.ResponseWriter, req *http.Request) {
 	state := strings.ToUpper(strings.TrimPrefix(req.URL.Path, "/data/"))
@@ -357,6 +370,7 @@ func state_response(w http.ResponseWriter, req *http.Request) {
 func http_server() {
 	godotenv.Load(".env.local")
 	http.HandleFunc("/comparison", comparison_repsonse)
+	http.HandleFunc("/comparison/", part_comparison_repsonse)
 	http.HandleFunc("/data/", state_response)
 	http.ListenAndServe(os.Getenv("PORT"), nil)
 }
