@@ -5,12 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="123620c7-e06d-44e1-8220-2a3deeb3ddbd" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/backend/Dataset/Excerise_Lift.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/Dataset/Excerise_More.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/Dataset/Exercise.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/Dataset/Failed_Banks.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/Dataset/Fruit.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/Dataset/Lift.csv" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/.env.local.example" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/backend/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/backend/go.mod" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/backend/go.sum" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/backend/main.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -62,6 +62,7 @@
 }</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\alexa\Downloads\Stats-of-America\backend\Dataset_Broken" />
       <recent name="C:\Users\alexa\Downloads\Stats-of-America\backend\Examples" />
       <recent name="C:\Users\alexa\Downloads\Stats-of-America\backend\Output" />
       <recent name="C:\Users\alexa\Downloads\Stats-of-America" />

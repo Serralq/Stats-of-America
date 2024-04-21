@@ -24,3 +24,4 @@ go.work
 # Manually added
 .idea/*
 Output/*
+.env.local

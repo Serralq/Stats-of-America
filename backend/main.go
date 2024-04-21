@@ -4,6 +4,7 @@ import (
 	"encoding/csv"
 	"encoding/json"
 	"fmt"
+	"github.com/joho/godotenv"
 	"io/ioutil"
 	"math"
 	"net/http"
@@ -351,9 +352,10 @@ func state_response(w http.ResponseWriter, req *http.Request) {
 }
 
 func http_server() {
+	godotenv.Load(".env.local")
 	http.HandleFunc("/comparison", comparison_repsonse)
 	http.HandleFunc("/data/", state_response)
-	http.ListenAndServe(":3000", nil)
+	http.ListenAndServe(os.Getenv("PORT"), nil)
 }
 
 func main() {
@@ -383,6 +385,7 @@ func main() {
 	fmt.Println("Generate JSON: " + duration.String())
 
 	// Create http server
-	fmt.Println("Running server on localhost:3000")
+	godotenv.Load(".env.local")
+	fmt.Println("Running server on localhost:" + os.Getenv("PORT"))
 	http_server()
 }
