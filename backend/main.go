@@ -129,8 +129,6 @@ func generateSplitsFromRecords(records [][]string, algo string) {
 	// Setup multi-dimensional array
 	perState := make(map[string][][]float64)
 	// Create output directorlocalhosty
-	os.RemoveAll("Output/JSON/")
-	os.RemoveAll("Output/Split/")
 	os.MkdirAll("Output/JSON/"+title, 777)
 	os.MkdirAll("Output/Split/"+title, 777)
 
@@ -250,6 +248,9 @@ func generateSplit(algo string) {
 	defer f.Close()
 	files, _ := f.Readdir(0)
 
+	// Clean up output files
+	os.RemoveAll("Output/JSON/")
+	os.RemoveAll("Output/Split/")
 	// Per file
 	for _, v := range files {
 		// Read file
