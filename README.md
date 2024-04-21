@@ -4,7 +4,8 @@
 - [NodeJS](https://nodejs.org/en)
 - [yarn](https://yarnpkg.com/) (not required but preferred)
 ### Steps 
-> ⚠️ In order for the frontend to properly fetch data, a backend must be started and the frontend must be configured to use this backend. See [Backend](#backend) for more information.
+> [!CAUTION]
+> In order for the frontend to properly fetch data, a backend must be started and the frontend must be configured to use this backend. See [Backend](#backend) for more information.
 
 1. Navigate to the `frontend` directory.
 2. Configure `.env.local.example` to use the correct environment values.
