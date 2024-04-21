@@ -1,3 +1,19 @@
+# Frontend
+## Starting the Frontend
+### Requirements
+- [NodeJS](https://nodejs.org/en)
+- [yarn](https://yarnpkg.com/) (not required but preferred)
+### Steps 
+> ⚠️ In order for the frontend to properly fetch data, a backend must be started and the frontend must be configured to use this backend. See [Backend](#backend) for more information.
+
+1. Navigate to the `frontend` directory.
+2. Configure `.env.local.example` to use the correct environment values.
+3. Rename `.env.local.example` to `.env.local`.
+4. Run `yarn` to install all dependencies.
+5. Run `yarn dev` to start a development instance of the server.
+
+# Backend
+
 ## HTTP Server Endpoints
 ### /data/:state
 - Type: `POST`
