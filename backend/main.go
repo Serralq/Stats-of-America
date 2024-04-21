@@ -128,7 +128,7 @@ func generateSplitsFromRecords(records [][]string, algo string) {
 
 	// Setup multi-dimensional array
 	perState := make(map[string][][]float64)
-	// Create output directorlocalhosty
+	// Create output directory
 	os.MkdirAll("Output/JSON/"+title, 777)
 	os.MkdirAll("Output/Split/"+title, 777)
 
@@ -322,10 +322,15 @@ func generateJSON() {
 			temp.Path = []string{
 				f.Path, f2.Path,
 			}
-			if f.State != f2.State {
-				temp.Similarity = compareCSV(f.Path, f2.Path)
-				result[f.State] = append(result[f.State], temp)
+			if f.State == f2.State {
+				continue
 			}
+			// TODO remove if there's no good comparisons
+			if f.X_axis == f2.X_axis && f.Y_axis == f2.Y_axis {
+				continue
+			}
+			temp.Similarity = compareCSV(f.Path, f2.Path)
+			result[f.State] = append(result[f.State], temp)
 		}
 
 		// Sort the array, smaller -> larger
@@ -338,7 +343,7 @@ func generateJSON() {
 	// Create json file
 	bytes, _ := json.Marshal(result)
 	ioutil.WriteFile("Output/comparisons.json", bytes, 0777)
-	os.RemoveAll("Output/JSON/")
+	os.RemoveAll("Output/Compare/")
 	os.MkdirAll("Output/Compare/", 777)
 	// Create split json files
 	for k, v := range result {
@@ -403,6 +408,6 @@ func main() {
 
 	// Create http server
 	godotenv.Load(".env.local")
-	fmt.Println("Running server on localhost:" + os.Getenv("PORT"))
+	fmt.Println("Running server on localhost" + os.Getenv("PORT"))
 	http_server()
 }
