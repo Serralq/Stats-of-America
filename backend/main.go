@@ -308,6 +308,7 @@ func generateJSON() {
 
 	// Setup json results
 	result := make(map[string][]State)
+	partial_result := make(map[string][]State)
 
 	// Each csv file against every other csv file
 	for _, f := range paths {
@@ -325,17 +326,20 @@ func generateJSON() {
 			if f.State == f2.State {
 				continue
 			}
-			// TODO remove if there's no good comparisons
-			if f.X_axis == f2.X_axis && f.Y_axis == f2.Y_axis {
-				continue
-			}
 			temp.Similarity = compareCSV(f.Path, f2.Path)
 			result[f.State] = append(result[f.State], temp)
+			// If different graphs
+			if f.X_axis != f2.X_axis || f.Y_axis != f2.Y_axis {
+				partial_result[f.State] = append(partial_result[f.State], temp)
+			}
 		}
 
 		// Sort the array, smaller -> larger
 		sort.SliceStable(result[f.State], func(i, j int) bool {
 			return result[f.State][i].Similarity < result[f.State][j].Similarity
+		})
+		sort.SliceStable(partial_result[f.State], func(i, j int) bool {
+			return partial_result[f.State][i].Similarity < partial_result[f.State][j].Similarity
 		})
 
 	}
@@ -345,10 +349,16 @@ func generateJSON() {
 	ioutil.WriteFile("Output/comparisons.json", bytes, 0777)
 	os.RemoveAll("Output/Compare/")
 	os.MkdirAll("Output/Compare/", 777)
+	os.RemoveAll("Output/Partial/")
+	os.MkdirAll("Output/Partial/", 777)
 	// Create split json files
 	for k, v := range result {
 		bytes, _ = json.Marshal(v)
 		ioutil.WriteFile("Output/Compare/"+k+".json", bytes, 0777)
+	}
+	for k, v2 := range partial_result {
+		bytes, _ = json.Marshal(v2)
+		ioutil.WriteFile("Output/Partial/"+k+".json", bytes, 0777)
 	}
 }
 
@@ -360,6 +370,12 @@ func part_comparison_repsonse(w http.ResponseWriter, req *http.Request) {
 	state := strings.ToUpper(strings.TrimPrefix(req.URL.Path, "/comparison/"))
 
 	http.ServeFile(w, req, "Output/Compare/"+state+".json")
+}
+
+func partial_comparison_repsonse(w http.ResponseWriter, req *http.Request) {
+	state := strings.ToUpper(strings.TrimPrefix(req.URL.Path, "/partial_comparison/"))
+
+	http.ServeFile(w, req, "Output/Partial/"+state+".json")
 }
 func state_response(w http.ResponseWriter, req *http.Request) {
 	state := strings.ToUpper(strings.TrimPrefix(req.URL.Path, "/data/"))
@@ -377,6 +393,7 @@ func http_server() {
 	http.HandleFunc("/comparison", comparison_repsonse)
 	http.HandleFunc("/comparison/", part_comparison_repsonse)
 	http.HandleFunc("/data/", state_response)
+	http.HandleFunc("/partial_comparison/", partial_comparison_repsonse)
 	http.ListenAndServe(os.Getenv("PORT"), nil)
 }
 
