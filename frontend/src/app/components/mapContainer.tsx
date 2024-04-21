@@ -1,16 +1,17 @@
 'use client';
 
 import { ComposableMap, Geographies, Geography } from 'react-simple-maps';
-import { GEO_URL } from '../util/constants';
-import { RenderableGeography } from '../types/map';
+import { RenderableGeography, StateMap } from '../types/map';
 import { Dispatch, SetStateAction, useState } from 'react';
 
 export default function MapContainer({
 	selectedState,
 	setSelectedState,
+	stateMap,
 }: {
 	selectedState: string | null;
 	setSelectedState: Dispatch<SetStateAction<string | null>>;
+	stateMap: StateMap;
 }) {
 	return (
 		<div className="bg-gray-700 mt-24 p-8 drop-shadow-sm rounded-md border-solid border-gray-600 border flex flex-col items-center">
@@ -28,7 +29,7 @@ export default function MapContainer({
 				projectionConfig={{ scale: 1100 }}
 				className="w-full h-full"
 			>
-				<Geographies geography={GEO_URL} key="states">
+				<Geographies geography={stateMap} key="states">
 					{({ geographies }: { geographies: RenderableGeography[] }) =>
 						geographies.map((geo, i) => (
 							<Geography
