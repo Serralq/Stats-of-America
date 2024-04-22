@@ -232,10 +232,13 @@ func generateSplitsFromRecords(records [][]string, algo string) {
 				}
 
 				// Create regular split files
-				temp := make([]string, 0)
-				temp = append(temp, strconv.FormatFloat(v[i][0], 'f', -1, 64))
-				temp = append(temp, strconv.FormatFloat(v[i][1], 'f', -1, 64))
-				single.Data = append(single.Data, []float64{v[i][0], v[i][1]})
+				//temp := make([]string, 0)
+				//temp = append(temp, strconv.FormatFloat(v[i][0], 'f', -1, 64))
+				//temp = append(temp, strconv.FormatFloat(v[i][1], 'f', -1, 64))
+				// Pre normalize the data
+				temp_x := (v[i][0] - min_x) / (max_x - min_x)
+				temp_y := (v[i][1] - min_y) / (max_y - min_y)
+				single.Data = append(single.Data, []float64{temp_x, temp_y})
 			}
 			// Write JSON split file
 			bytes, _ := json.Marshal(single)
@@ -370,15 +373,65 @@ func comparison_repsonse(w http.ResponseWriter, req *http.Request) {
 }
 
 func part_comparison_repsonse(w http.ResponseWriter, req *http.Request) {
+	// Which state and page_num
 	state := mux.Vars(req)["state"]
+	page_num_string := req.URL.Query().Get("page")
+	if page_num_string == "" {
+		http.ServeFile(w, req, "Output/Compare/"+state+".json")
+		return
+	}
+	page_num, _ := strconv.ParseInt(page_num_string, 10, 64)
 
-	http.ServeFile(w, req, "Output/Compare/"+state+".json")
+	// Read json
+	bytes, _ := ioutil.ReadFile("Output/Compare/" + state + ".json")
+	page := []State{}
+	json.Unmarshal(bytes, &page)
+
+	// Out of bound checking
+	if page_num*10 > int64(len(page)) {
+		page = []State{}
+	} else if page_num+1*10 > int64(len(page)) {
+		page = page[page_num*10:]
+	} else {
+		page = page[page_num*10 : (page_num+1)*10]
+	}
+
+	// Return json
+	bytes, _ = json.Marshal(page)
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusCreated)
+	w.Write(bytes)
 }
 
 func partial_comparison_repsonse(w http.ResponseWriter, req *http.Request) {
+	// Which state and page_num
 	state := mux.Vars(req)["state"]
+	page_num_string := req.URL.Query().Get("page")
+	if page_num_string == "" {
+		http.ServeFile(w, req, "Output/Partial/"+state+".json")
+		return
+	}
+	page_num, _ := strconv.ParseInt(page_num_string, 10, 64)
 
-	http.ServeFile(w, req, "Output/Partial/"+state+".json")
+	// Read json
+	bytes, _ := ioutil.ReadFile("Output/Partial/" + state + ".json")
+	page := []State{}
+	json.Unmarshal(bytes, &page)
+
+	// Out of bound checking
+	if page_num*10 > int64(len(page)) {
+		page = []State{}
+	} else if page_num+1*10 > int64(len(page)) {
+		page = page[page_num*10:]
+	} else {
+		page = page[page_num*10 : (page_num+1)*10]
+	}
+
+	// Return json
+	bytes, _ = json.Marshal(page)
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusCreated)
+	w.Write(bytes)
 }
 func state_response(w http.ResponseWriter, req *http.Request) {
 	state := mux.Vars(req)["state"]

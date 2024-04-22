@@ -85,9 +85,57 @@ Returns a JSON object with the following structure.
 	// ...rest of the comparisons for each state
 ]
 ```
+### /comparison/:state?page=0
+- Type: `GET`
+- Retrieves the entire similarities for a state for each data comparison done on every other state.
+- Only returns comparison data in chunks of 10 starting from 0
+- Returns an empty json file if there's no more pages
+#### Return Body
+Returns a JSON object with the following structure.
+```json
+[
+	{
+		"state": "[state]",
+		"comparedData":[
+			["x-axis-1", "y-axis-1"],
+			["x-axis-2", "y-axis-2"]
+		],
+		"path": [
+			"data-path-1",
+			"data-path-2"
+		],
+		"similarity": 1.9563774772818556
+	}
+	// ...rest of the comparisons for each state
+]
+```
 ### /partial_comparison/:state
 - Type: `GET`
 - Retrieves the entire similarities for a state for each data comparison done on every other state if they are not from the same graph
+#### Return Body
+Returns a JSON object with the following structure.
+```json
+[
+	{
+		"state": "[state]",
+		"comparedData":[
+			["x-axis-1", "y-axis-1"],
+			["x-axis-2", "y-axis-2"]
+		],
+		"path": [
+			"data-path-1",
+			"data-path-2"
+		],
+		"similarity": 1.9563774772818556
+	}
+	// ...rest of the comparisons for each state
+]
+```
+### /partial_comparison/:state?page=0
+- Type: `GET`
+- Retrieves the entire similarities for a state for each data comparison done on every other state if they are not from the same graph
+- Only returns comparison data in chunks of 10 starting from 0
+- Returns an empty json file if there's no more pages
 #### Return Body
 Returns a JSON object with the following structure.
 ```json
