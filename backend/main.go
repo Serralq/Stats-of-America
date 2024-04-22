@@ -4,7 +4,6 @@ import (
 	"encoding/csv"
 	"encoding/json"
 	"fmt"
-	"github.com/joho/godotenv"
 	"io/ioutil"
 	"math"
 	"net/http"
@@ -14,6 +13,10 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/gorilla/handlers"
+	"github.com/gorilla/mux"
+	"github.com/joho/godotenv"
 )
 
 type State struct {
@@ -367,18 +370,18 @@ func comparison_repsonse(w http.ResponseWriter, req *http.Request) {
 }
 
 func part_comparison_repsonse(w http.ResponseWriter, req *http.Request) {
-	state := strings.ToUpper(strings.TrimPrefix(req.URL.Path, "/comparison/"))
+	state := mux.Vars(req)["state"]
 
 	http.ServeFile(w, req, "Output/Compare/"+state+".json")
 }
 
 func partial_comparison_repsonse(w http.ResponseWriter, req *http.Request) {
-	state := strings.ToUpper(strings.TrimPrefix(req.URL.Path, "/partial_comparison/"))
+	state := mux.Vars(req)["state"]
 
 	http.ServeFile(w, req, "Output/Partial/"+state+".json")
 }
 func state_response(w http.ResponseWriter, req *http.Request) {
-	state := strings.ToUpper(strings.TrimPrefix(req.URL.Path, "/data/"))
+	state := mux.Vars(req)["state"]
 	fmt.Println(state)
 	body := Request{}
 	json.NewDecoder(req.Body).Decode(&body)
@@ -390,11 +393,19 @@ func state_response(w http.ResponseWriter, req *http.Request) {
 
 func http_server() {
 	godotenv.Load(".env.local")
-	http.HandleFunc("/comparison", comparison_repsonse)
-	http.HandleFunc("/comparison/", part_comparison_repsonse)
-	http.HandleFunc("/data/", state_response)
-	http.HandleFunc("/partial_comparison/", partial_comparison_repsonse)
-	http.ListenAndServe(os.Getenv("PORT"), nil)
+
+	r := mux.NewRouter()
+	r.HandleFunc("/comparison", comparison_repsonse).Methods("GET", "POST")
+	r.HandleFunc("/comparison/{state}", part_comparison_repsonse).Methods("GET", "POST")
+	r.HandleFunc("/data/{state}", state_response).Methods("GET", "POST")
+	r.HandleFunc("/partial_comparison/{state}", partial_comparison_repsonse).Methods("GET", "POST")
+
+	corsObj := handlers.CORS(
+		handlers.AllowedOrigins([]string{"*"}),
+		handlers.AllowedMethods([]string{"GET", "POST"}),
+	)
+
+	http.ListenAndServe(os.Getenv("PORT"), corsObj(r))
 }
 
 func main() {
