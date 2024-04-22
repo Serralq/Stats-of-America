@@ -1,3 +1,4 @@
+import { DataSet } from '../types/dataSet';
 import { StateMap } from '../types/map';
 import { ComparisonElement } from '../types/similarityDataSet';
 import { GEO_URL, STATE_ABBREVIATION_MAPPINGS } from './constants';

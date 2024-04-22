@@ -3,14 +3,19 @@
 import { ComposableMap, Geographies, Geography } from 'react-simple-maps';
 import { RenderableGeography, StateMap } from '../types/map';
 import { Dispatch, SetStateAction } from 'react';
+import { ComparisonElement } from '../types/similarityDataSet';
 
 export default function MapContainer({
 	selectedState,
 	setSelectedState,
+	loadedComparisons,
+	setLoadedComparisons,
 	stateMap,
 }: {
 	selectedState: string | null;
 	setSelectedState: Dispatch<SetStateAction<string | null>>;
+	loadedComparisons: ComparisonElement[];
+	setLoadedComparisons: Dispatch<SetStateAction<ComparisonElement[]>>;
 	stateMap: StateMap;
 }) {
 	return (
@@ -40,6 +45,7 @@ export default function MapContainer({
 									if (selectedState == geo.properties.name)
 										return setSelectedState(null);
 									else setSelectedState(geo.properties.name);
+									setLoadedComparisons([]);
 								}}
 								fill={
 									geo.properties.name != selectedState
