@@ -44,6 +44,19 @@ export default function CardContainer({
 					Could not load comparison data for {selectedState}!
 				</h3>
 			)}
+			{selectedState &&
+				!loadingData &&
+				similarityData &&
+				similarityData.map(e => (
+					<Card
+						comparisonElement={e}
+						handleSelect={_ => {
+							if (selectedComparisonElement != e)
+								setSelectedComparisonElement(selectedComparisonElement);
+							else setSelectedComparisonElement(null);
+						}}
+					/>
+				))}
 		</div>
 	);
 }
