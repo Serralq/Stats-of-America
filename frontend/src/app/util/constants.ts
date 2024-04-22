@@ -11,7 +11,6 @@ export const STATE_ABBREVIATION_MAPPINGS: { [key: string]: string } = {
 	Colorado: 'CO',
 	Connecticut: 'CT',
 	Delaware: 'DE',
-	'District of Columbia': 'DC',
 	Florida: 'FL',
 	Georgia: 'GA',
 	Hawaii: 'HI',

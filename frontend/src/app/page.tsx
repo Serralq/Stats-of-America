@@ -1,30 +1,23 @@
-'use client';
-
-import { useState } from 'react';
-import HeroContainer from './components/heroContainer';
-import MapContainer from './components/mapContainer';
+import RootContainer from './components/rootContainer';
 import { ComparisonElement } from './types/similarityDataSet';
-import CardContainer from './components/card/cardContainer';
+import { STATE_ABBREVIATION_MAPPINGS } from './util/constants';
+import { getSimilarityDataForState, getStateMap } from './util/functions';
 
-export default function Home() {
-	const [selectedState, setSelectedState] = useState<string | null>(null);
-	const [selectedComparisonElement, setSelectedComparisonElement] =
-		useState<ComparisonElement | null>(null);
+export default async function Home() {
+	const stateMap = await getStateMap();
+	const similarityDataSet: Map<string, ComparisonElement[]> = new Map();
+
+	for (const state in STATE_ABBREVIATION_MAPPINGS) {
+		const similarityData = await getSimilarityDataForState(state);
+		similarityDataSet.set(state, similarityData);
+	}
 
 	return (
 		<main className="flex flex-col h-screen w-screen items-center">
-			<HeroContainer />
-			<div className="flex w-4/6 h-3/6">
-				<MapContainer
-					selectedState={selectedState}
-					setSelectedState={setSelectedState}
-				/>
-				<CardContainer
-					selectedState={selectedState}
-					selectedComparisonElement={selectedComparisonElement}
-					setSelectedComparisonElement={setSelectedComparisonElement}
-				/>
-			</div>
+			<RootContainer
+				stateMap={stateMap}
+				similarityDataSet={similarityDataSet}
+			/>
 		</main>
 	);
 }
