@@ -5,12 +5,8 @@ import HeroContainer from './components/heroContainer';
 import MapContainer from './components/mapContainer';
 import { ComparisonElement } from './types/similarityDataSet';
 import CardContainer from './components/card/cardContainer';
-import { InferGetStaticPropsType } from 'next';
-import { getStaticProps } from './util/functions';
 
-export default function Home({
-	repo,
-}: InferGetStaticPropsType<typeof getStaticProps>) {
+export default function Home() {
 	const [selectedState, setSelectedState] = useState<string | null>(null);
 	const [selectedComparisonElement, setSelectedComparisonElement] =
 		useState<ComparisonElement | null>(null);
@@ -22,13 +18,11 @@ export default function Home({
 				<MapContainer
 					selectedState={selectedState}
 					setSelectedState={setSelectedState}
-					stateMap={repo.stateMap}
 				/>
 				<CardContainer
 					selectedState={selectedState}
 					selectedComparisonElement={selectedComparisonElement}
 					setSelectedComparisonElement={setSelectedComparisonElement}
-					similarityDataSet={repo.similarityDataSet}
 				/>
 			</div>
 		</main>

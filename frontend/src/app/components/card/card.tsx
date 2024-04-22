@@ -7,5 +7,5 @@ export default function Card({
 	comparisonElement: ComparisonElement;
 	handleSelect: (e: React.MouseEvent) => void;
 }) {
-	return <div></div>;
+	return <div className="cursor-pointer" onMouseDown={handleSelect}></div>;
 }
