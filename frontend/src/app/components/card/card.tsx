@@ -12,7 +12,7 @@ export default function Card({
 			className="cursor-pointer h-full w-full bg-gray-600 border border-gray-500 rounded-md shadow-sm p-1 flex justify-between hover:bg-gray-500 hover:border-gray-400 active:bg-gray-700 active:border-gray-600"
 			onMouseDown={handleSelect}
 		>
-			<div className="flex-1 w-1/2">
+			<div className="flex-1 w-1/2 pl-2">
 				<h3 className="text-gray-300 font-semibold">
 					{comparisonElement.comparedData[0][0]} vs.{' '}
 					{comparisonElement.comparedData[0][1]}

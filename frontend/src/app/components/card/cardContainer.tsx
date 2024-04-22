@@ -23,7 +23,7 @@ export default function CardContainer({
 			{selectedState ? (
 				similarityDataSet.get(selectedState)?.map(e => {
 					return (
-						<div className="p-3 w-full">
+						<div className="p-3 pb-0 w-full">
 							<Card
 								comparisonElement={e}
 								handleSelect={_ => {
