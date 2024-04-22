@@ -7,7 +7,7 @@ import ChartDisplay from '../chart/chartDisplay';
 
 const fetcher = (data: [string, number]) =>
 	fetch(
-		`${process.env.API_BASE}/comparison/${
+		`${process.env.API_BASE}/partial_comparison/${
 			STATE_ABBREVIATION_MAPPINGS[data[0]]
 		}?page=${data[1]}`
 	).then(res => res.json() as Promise<ComparisonElement[]>);
