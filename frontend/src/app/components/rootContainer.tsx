@@ -23,6 +23,7 @@ export default function RootContainer({ stateMap }: { stateMap: StateMap }) {
 				<MapContainer
 					selectedState={selectedState}
 					setSelectedState={setSelectedState}
+					setSelectedComparisonElement={setSelectedComparisonElement}
 					setLoadedComparisons={setLoadedComparisons}
 					stateMap={stateMap}
 					setPage={setPage}
