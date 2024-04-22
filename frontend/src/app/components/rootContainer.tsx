@@ -14,6 +14,7 @@ export default function RootContainer({ stateMap }: { stateMap: StateMap }) {
 	const [loadedComparisons, setLoadedComparisons] = useState<
 		ComparisonElement[]
 	>([]);
+	const [page, setPage] = useState(0);
 
 	return (
 		<div className="h-full w-full flex items-center flex-col">
@@ -22,9 +23,9 @@ export default function RootContainer({ stateMap }: { stateMap: StateMap }) {
 				<MapContainer
 					selectedState={selectedState}
 					setSelectedState={setSelectedState}
-					loadedComparisons={loadedComparisons}
 					setLoadedComparisons={setLoadedComparisons}
 					stateMap={stateMap}
+					setPage={setPage}
 				/>
 				<CardContainer
 					selectedState={selectedState}
@@ -32,6 +33,8 @@ export default function RootContainer({ stateMap }: { stateMap: StateMap }) {
 					setSelectedComparisonElement={setSelectedComparisonElement}
 					loadedComparisons={loadedComparisons}
 					setLoadedComparisons={setLoadedComparisons}
+					page={page}
+					setPage={setPage}
 				/>
 			</div>
 		</div>

@@ -18,6 +18,8 @@ export default function CardContainer({
 	setSelectedComparisonElement,
 	loadedComparisons,
 	setLoadedComparisons,
+	page,
+	setPage,
 }: {
 	selectedState: string | null;
 	selectedComparisonElement: ComparisonElement | null;
@@ -26,9 +28,9 @@ export default function CardContainer({
 	>;
 	loadedComparisons: ComparisonElement[];
 	setLoadedComparisons: Dispatch<SetStateAction<ComparisonElement[]>>;
+	page: number;
+	setPage: Dispatch<SetStateAction<number>>;
 }) {
-	const [page, setPage] = useState(0);
-
 	let shouldFetch = selectedState != null;
 	const { data, isLoading } = useSWR(
 		shouldFetch ? [selectedState!, page] : null,
@@ -90,7 +92,7 @@ export default function CardContainer({
 					</>
 				)}
 			{selectedComparisonElement && selectedState && (
-				<div className='h-full w-full flex flex-col items-center justify-center'>
+				<div className="h-full w-full flex flex-col items-center justify-center">
 					<ChartDisplay
 						currentState={selectedState}
 						selectedComparisonElement={selectedComparisonElement}

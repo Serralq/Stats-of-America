@@ -8,15 +8,15 @@ import { ComparisonElement } from '../types/similarityDataSet';
 export default function MapContainer({
 	selectedState,
 	setSelectedState,
-	loadedComparisons,
 	setLoadedComparisons,
 	stateMap,
+	setPage
 }: {
 	selectedState: string | null;
 	setSelectedState: Dispatch<SetStateAction<string | null>>;
-	loadedComparisons: ComparisonElement[];
 	setLoadedComparisons: Dispatch<SetStateAction<ComparisonElement[]>>;
 	stateMap: StateMap;
+	setPage: Dispatch<SetStateAction<number>>;
 }) {
 	return (
 		<div className="bg-gray-700 mt-24 p-8 drop-shadow-sm rounded-md border-solid border-gray-600 border flex flex-col items-center">
@@ -42,10 +42,11 @@ export default function MapContainer({
 								key={geo.rsmKey}
 								geography={geo}
 								onMouseDown={_ => {
+									setLoadedComparisons([]);
+									setPage(0);
 									if (selectedState == geo.properties.name)
 										return setSelectedState(null);
 									else setSelectedState(geo.properties.name);
-									setLoadedComparisons([]);
 								}}
 								fill={
 									geo.properties.name != selectedState
