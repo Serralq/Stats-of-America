@@ -19,17 +19,19 @@ export default function CardContainer({
 	similarityDataSet: Map<string, ComparisonElement[]>;
 }) {
 	return (
-		<div className="bg-gray-700 mt-24 ml-20 w-5/6 overflow-y-auto overflow-x-hidden justify-center drop-shadow-sm rounded-md border-solid border-gray-600 border flex flex-col items-center">
+		<div className="bg-gray-700 mt-24 ml-20 w-5/6 overflow-y-auto overflow-x-hidden justify-center drop-shadow-sm rounded-md border-solid border-gray-600 border flex flex-wrap items-center">
 			{selectedState ? (
 				similarityDataSet.get(selectedState)?.map(e => {
 					return (
-						<Card
-							comparisonElement={e}
-							handleSelect={_ => {
-								if (e != selectedComparisonElement)
-									setSelectedComparisonElement(e);
-							}}
-						/>
+						<div className="p-3 w-full">
+							<Card
+								comparisonElement={e}
+								handleSelect={_ => {
+									if (e != selectedComparisonElement)
+										setSelectedComparisonElement(e);
+								}}
+							/>
+						</div>
 					);
 				})
 			) : (
