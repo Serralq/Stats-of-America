@@ -232,10 +232,13 @@ func generateSplitsFromRecords(records [][]string, algo string) {
 				}
 
 				// Create regular split files
-				temp := make([]string, 0)
-				temp = append(temp, strconv.FormatFloat(v[i][0], 'f', -1, 64))
-				temp = append(temp, strconv.FormatFloat(v[i][1], 'f', -1, 64))
-				single.Data = append(single.Data, []float64{v[i][0], v[i][1]})
+				//temp := make([]string, 0)
+				//temp = append(temp, strconv.FormatFloat(v[i][0], 'f', -1, 64))
+				//temp = append(temp, strconv.FormatFloat(v[i][1], 'f', -1, 64))
+				// Pre normalize the data
+				temp_x := (v[i][0] - min_x) / (max_x - min_x)
+				temp_y := (v[i][1] - min_y) / (max_y - min_y)
+				single.Data = append(single.Data, []float64{temp_x, temp_y})
 			}
 			// Write JSON split file
 			bytes, _ := json.Marshal(single)
