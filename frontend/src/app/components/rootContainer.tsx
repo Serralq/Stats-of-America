@@ -1,11 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Repo } from '../types/propsRepo';
-import {
-	ComparisonElement,
-	SimilarityDataSet,
-} from '../types/similarityDataSet';
+import { ComparisonElement } from '../types/similarityDataSet';
 import HeroContainer from './heroContainer';
 import MapContainer from './mapContainer';
 import CardContainer from './card/cardContainer';
@@ -23,7 +19,7 @@ export default function RootContainer({
 		useState<ComparisonElement | null>(null);
 
 	return (
-		<div className='h-full w-full flex items-center flex-col'>
+		<div className="h-full w-full flex items-center flex-col">
 			<HeroContainer />
 			<div className="flex w-4/6 h-3/6">
 				<MapContainer

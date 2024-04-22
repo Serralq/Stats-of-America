@@ -1,7 +1,4 @@
-import {
-	ComparisonElement,
-	SimilarityDataSet,
-} from '@/app/types/similarityDataSet';
+import { ComparisonElement } from '@/app/types/similarityDataSet';
 import { Dispatch, SetStateAction } from 'react';
 import Card from './card';
 

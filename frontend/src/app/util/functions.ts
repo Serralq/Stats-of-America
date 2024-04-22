@@ -1,8 +1,5 @@
 import { StateMap } from '../types/map';
-import {
-	ComparisonElement,
-	SimilarityDataSet,
-} from '../types/similarityDataSet';
+import { ComparisonElement } from '../types/similarityDataSet';
 import { GEO_URL, STATE_ABBREVIATION_MAPPINGS } from './constants';
 
 export async function getStateMap() {
