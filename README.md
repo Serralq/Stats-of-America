@@ -1,3 +1,7 @@
+# Stats of America
+*United we stand, divided we fall; we are unified by statistics.*
+The United States of America is diversified more than ever; however, there is one thing that we have in common: statistics. We are ALL unified by statistics! This project takes various data sets, normalizes them, and combines them to show us Americans how similar we all really are.
+
 # Frontend
 ## Starting the Frontend
 ### Requirements
@@ -13,6 +17,16 @@
 5. Run `yarn dev` to start a development instance of the server.
 
 # Backend
+## Starting the Backend
+### Requirements
+- [Go](https://go.dev/)
+
+### Steps
+There are two ways to run the backend, through Docker and running it via the CLI. We will only be going over running it in the CLI.
+
+1. Navigate to the `backend` directory.
+2. Configure `.env.local` using `.env.local.example`.
+3. Run `go run main.go`.
 
 ## HTTP Server Endpoints
 ### /data/:state
