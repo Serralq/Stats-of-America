@@ -1,5 +1,5 @@
 export interface DataSet {
 	x: string;
 	y: string;
-	data: number[][];
+	data: [number, number][];
 }

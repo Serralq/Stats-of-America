@@ -4,6 +4,7 @@ import Card from './card';
 import useSWR from 'swr';
 import { STATE_ABBREVIATION_MAPPINGS } from '@/app/util/constants';
 import ChartDisplay from '../chart/chartDisplay';
+import { getStateFromAbbreviation } from '@/app/util/functions';
 
 const fetcher = (data: [string, number]) =>
 	fetch(
@@ -92,17 +93,38 @@ export default function CardContainer({
 					</>
 				)}
 			{selectedComparisonElement && selectedState && (
-				<div className="h-full w-full flex flex-col items-center justify-center">
-					<ChartDisplay
-						currentState={selectedState}
-						selectedComparisonElement={selectedComparisonElement}
-					/>
-					<button
-						onClick={_ => setSelectedComparisonElement(null)}
-						className="p-2 m-2 text-gray-300 font-semibold bg-gray-600 border border-gray-500 rounded-md hover:bg-gray-500 hover:border-gray-400 active:bg-gray-700 active:border-gray-600 shadow-sm"
-					>
-						Back
-					</button>
+				<div className="h-full w-full flex items-center justify-center">
+					<div className="w-2/4">
+						<ChartDisplay
+							currentState={selectedState}
+							selectedComparisonElement={selectedComparisonElement}
+						/>
+					</div>
+					<div className="flex-1 items-center flex flex-col justify-end w-2/4 mx-3">
+						<h3 className="text-gray-300 font-semibold">
+							{selectedState} vs.{' '}
+							{getStateFromAbbreviation(selectedComparisonElement.state)}
+						</h3>
+						<h3 className="text-gray-400 text-center">
+							<strong>{selectedState} Data:</strong>{' '}
+							{selectedComparisonElement.comparedData[0][0]} vs.{' '}
+							{selectedComparisonElement.comparedData[0][1]}
+						</h3>
+						<h3 className="text-gray-400 text-center">
+							<strong>
+								{getStateFromAbbreviation(selectedComparisonElement.state)}{' '}
+								Data:
+							</strong>{' '}
+							{selectedComparisonElement.comparedData[1][0]} vs.{' '}
+							{selectedComparisonElement.comparedData[1][1]}
+						</h3>
+						<button
+							onClick={_ => setSelectedComparisonElement(null)}
+							className="p-2 m-2 text-gray-300 font-semibold bg-gray-600 border border-gray-500 rounded-md hover:bg-gray-500 hover:border-gray-400 active:bg-gray-700 active:border-gray-600 shadow-sm"
+						>
+							Back
+						</button>
+					</div>
 				</div>
 			)}
 		</div>

@@ -2,6 +2,7 @@ import { DataSet } from '@/app/types/dataSet';
 import { ComparisonElement } from '@/app/types/similarityDataSet';
 import { STATE_ABBREVIATION_MAPPINGS } from '@/app/util/constants';
 import useSWR from 'swr';
+import D3Chart from './d3Chart';
 
 const fetcher = async (data: [string, [string, string]]) => {
 	const res = await fetch(`${process.env.API_BASE}/data/${data[0]}`, {
@@ -31,6 +32,7 @@ export default function ChartDisplay({
 		],
 		fetcher
 	);
+
 	const {
 		data: comparedStateData,
 		isLoading: comparedStateDataLoading,
@@ -44,7 +46,7 @@ export default function ChartDisplay({
 	);
 
 	return (
-		<div>
+		<div className="h-full w-full flex items-center justify-center">
 			{currentStateDataLoading ||
 				(comparedStateDataLoading && (
 					<h3 className="text-gray-300 font-semibold">Loading data...</h3>
@@ -55,7 +57,9 @@ export default function ChartDisplay({
 					<h3 className="text-gray-300 font-semibold">Error loading data</h3>
 				)}
 			{currentStateData && comparedStateData && (
-				<h3>chart goes here</h3>
+				<div className="h-fit w-fit bg-gray-800 px-10 border border-gray-600 rounded-md shadow-sm">
+					<D3Chart datasets={[currentStateData, comparedStateData]} />
+				</div>
 			)}
 		</div>
 	);

@@ -1,6 +1,4 @@
-import { DataSet } from '../types/dataSet';
 import { StateMap } from '../types/map';
-import { ComparisonElement } from '../types/similarityDataSet';
 import { GEO_URL, STATE_ABBREVIATION_MAPPINGS } from './constants';
 
 export async function getStateMap() {
@@ -8,9 +6,9 @@ export async function getStateMap() {
 	return (await res.json()) as StateMap;
 }
 
-export async function getSimilarityDataForState(state: string) {
-	const res = await fetch(
-		`${process.env.API_BASE}/comparison/${STATE_ABBREVIATION_MAPPINGS[state]}`
-	);
-	return (await res.json()) as ComparisonElement[];
+export function getStateFromAbbreviation(abbreviation: string) {
+	for (const key in STATE_ABBREVIATION_MAPPINGS) {
+		if (STATE_ABBREVIATION_MAPPINGS[key] == abbreviation)
+			return key;
+	}
 }
