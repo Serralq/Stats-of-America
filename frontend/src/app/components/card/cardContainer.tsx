@@ -105,12 +105,12 @@ export default function CardContainer({
 							{selectedState} vs.{' '}
 							{getStateFromAbbreviation(selectedComparisonElement.state)}
 						</h3>
-						<h3 className="text-gray-400 text-center">
+						<h3 className="text-gray-400 text-center mt-2">
 							<strong>{selectedState} Data:</strong>{' '}
 							{selectedComparisonElement.comparedData[0][0]} vs.{' '}
 							{selectedComparisonElement.comparedData[0][1]}
 						</h3>
-						<h3 className="text-gray-400 text-center">
+						<h3 className="text-gray-400 text-center mt-2 mb-2">
 							<strong>
 								{getStateFromAbbreviation(selectedComparisonElement.state)}{' '}
 								Data:
